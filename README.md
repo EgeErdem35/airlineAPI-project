@@ -150,5 +150,6 @@ airlineapi-project/
 └── README.md
 
 ##14. ER Diagram
+
 ![ERdiagram](https://github.com/user-attachments/assets/50b408fa-abe5-4a23-9dc0-4f1c312132be)
 
