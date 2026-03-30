@@ -7,6 +7,7 @@
 - JWT Authentication
 - MySQL
 - AWS Elastic Beanstalk
+- AWS Aurora and RDS
 
 ## 1. Project Overview
 This project is a highly scalable, robust backend API for an Airline Ticketing System, developed as part of the SE 4458 Software Architecture & Design of Modern Large Scale Systems course. The system provides comprehensive functionalities for airline management, including flight scheduling (individual and bulk CSV uploads), ticket purchasing, passenger check-ins, and flight querying. 
