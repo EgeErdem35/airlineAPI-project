@@ -149,6 +149,4 @@ airlineapi-project/
 │   └── pom.xml
 └── README.md
 
-##14. ER Diagram
 
-![ER Diagram](./ERdiagram.jpeg)
