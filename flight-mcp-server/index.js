@@ -4,7 +4,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprot
 import axios from "axios";
 import dotenv from "dotenv";
 
-// .env dosyasındaki bilgileri (GATEWAY_URL ve AUTH_TOKEN) okur
+// .env dosyasındaki bilgileri okur
 dotenv.config();
 
 const GATEWAY_URL = process.env.GATEWAY_URL || "http://localhost:5000/api/v1/flights";
@@ -80,35 +80,27 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     try {
         if (name === "query_flight") {
-            // Unauthenticated endpoint
             const response = await axios.get(`${GATEWAY_URL}/query`, { params: args });
             return {
                 content: [{ type: "text", text: JSON.stringify(response.data, null, 2) }]
             };
         } 
-        
         else if (name === "book_flight") {
-            // Authenticated endpoint (Bearer token ile gider)
             const response = await apiClient.post(`${GATEWAY_URL}/tickets`, args);
             return {
                 content: [{ type: "text", text: JSON.stringify(response.data, null, 2) }]
             };
         } 
-        
         else if (name === "check_in") {
-            // Authenticated endpoint (Bearer token ile gider)
             const response = await apiClient.post(`${GATEWAY_URL}/check-in`, args);
             return {
                 content: [{ type: "text", text: JSON.stringify(response.data, null, 2) }]
             };
         } 
-        
         else {
             throw new Error(`Bilinmeyen araç çağrısı: ${name}`);
         }
-
     } catch (error) {
-        // Hata durumunda bunu yapay zekaya bildiriyoruz ki hatayı anlayıp kullanıcıya düzgünce söylesin
         const errorMsg = error.response ? JSON.stringify(error.response.data) : error.message;
         return {
             content: [{ type: "text", text: `API İşlem Hatası: ${errorMsg}` }],
@@ -117,7 +109,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 });
 
-// Sunucuyu Standart Girdi/Çıktı üzerinden başlat
 const transport = new StdioServerTransport();
 await server.connect(transport);
 console.error("✈️ Flight MCP Server çalışıyor...");
