@@ -1,0 +1,20 @@
+{
+  "name": "flight-mcp-server",
+  "version": "1.0.0",
+  "description": "Airline AI Agent MCP Server",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node agent.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "axios": "^1.14.0",
+    "dotenv": "^17.4.1",
+    "ollama": "^0.5.11"
+  }
+}
