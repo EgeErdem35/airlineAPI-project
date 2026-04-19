@@ -1,6 +1,7 @@
-# Airline AI Agent System - SE 4458 Final Project
+# Airline AI Agent System 
 
 **GitHub Repository:** [https://github.com/EgeErdem35/airlineAPI-project](https://github.com/EgeErdem35/airlineAPI-project)
+**YouTube video link:** https://youtu.be/6jctHYgnOKQ
 
 ## 🚀 Project Overview
 This project is an end-to-end AI-powered Airline Ticketing System. It integrates a robust Java Spring Boot backend (Midterm Project) with a modern React Frontend and a specialized AI Agent Backend using the **Model Context Protocol (MCP)**. The system allows users to search, book, and check-in to flights using natural language through an intelligent chat interface.
@@ -58,23 +59,6 @@ The system follows a modular, agentic architecture to fulfill all assignment req
 
 ---
 
-## 🧭 Step-by-Step AI Agent Workflow
-
-The system is designed for a seamless three-step user journey:
-
-1.  **Step 1: Flight Query**
-    - *User:* "Bugün İstanbul'dan Frankfurt'a uçuş var mı?"
-    - *Agent:* Queries availability and shows flight cards (e.g., **TK1523**).
-2.  **Step 2: Direct Booking**
-    - *User:* "I would like to book flight TK1523 for Ege Erdem."
-    - *Agent:* Executes a secure booking through the Gateway.
-    - *Response:* "Biletiniz başarılı bir şekilde satın alınmıştır." (with ticket details).
-3.  **Step 3: Contextual Check-in**
-    - *User:* "Check-in yapmak istiyorum."
-    - *Agent:* Recognizes the flight number from the previous context and completes the check-in.
-    - *Response:* Shows the digital Boarding Pass.
-
----
 
 ## ⚙️ How to Run Locally
 
