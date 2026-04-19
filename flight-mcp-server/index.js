@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 // .env dosyasındaki bilgileri okur
 dotenv.config();
 
-const GATEWAY_URL = process.env.GATEWAY_URL || "http://localhost:5000/api/v1/flights";
+const GATEWAY_URL = process.env.GATEWAY_URL || "http://localhost:5001/api/v1/flights";
 const AUTH_TOKEN = process.env.AUTH_TOKEN;
 
 // Token gerektiren endpoint'ler (bilet alma, check-in) için yetkili axios istemcisi
@@ -32,12 +32,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                     properties: {
                         dateFrom: { type: "string", description: "Gidiş tarihi (YYYY-MM-DD)" },
                         dateTo: { type: "string", description: "Dönüş tarihi (YYYY-MM-DD), eğer yolculuk tek yön ise dateFrom ile aynı olmalıdır." },
+                        returnDateFrom: { type: "string", description: "(Opsiyonel) Eğer ROUND_TRIP ise dönüş başlangıç tarihi (YYYY-MM-DD)" },
+                        returnDateTo: { type: "string", description: "(Opsiyonel) Eğer ROUND_TRIP ise dönüş bitiş tarihi (YYYY-MM-DD)" },
                         airportFrom: { type: "string", description: "Kalkış havalimanı (Örn: IST)" },
                         airportTo: { type: "string", description: "Varış havalimanı (Örn: FRA)" },
                         numberOfPeople: { type: "integer", description: "Yolcu sayısı" },
                         tripType: { type: "string", enum: ["ONE_WAY", "ROUND_TRIP"], description: "Yolculuk tipi" }
                     },
-                    required: ["dateFrom", "dateTo", "airportFrom", "airportTo", "numberOfPeople", "tripType"]
+                    required: ["dateFrom", "airportFrom", "airportTo", "numberOfPeople", "tripType"]
                 }
             },
             {
@@ -80,6 +82,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     try {
         if (name === "query_flight") {
+            // Defansif mantık: Eğer dateTo eksikse dateFrom ile aynı yap (ONE_WAY için yaygın hata)
+            if (!args.dateTo && args.dateFrom) {
+                args.dateTo = args.dateFrom;
+            }
             const response = await axios.get(`${GATEWAY_URL}/query`, { params: args });
             return {
                 content: [{ type: "text", text: JSON.stringify(response.data, null, 2) }]

@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class QueryRateLimitService {
 
-    private static final int DAILY_LIMIT = 3;
+    private static final int DAILY_LIMIT = 1000;
 
     private final Map<String, Integer> requestCounts = new ConcurrentHashMap<>();
     private LocalDate currentDate = LocalDate.now();

@@ -3,6 +3,7 @@ package com.ege.airline.service;
 import com.ege.airline.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface FlightService {
@@ -14,8 +15,10 @@ public interface FlightService {
     List<FlightResponse> searchFlights(String from, String to);
 
     FlightQueryResultResponse queryFlights(
-            String dateFrom,
-            String dateTo,
+            LocalDate dateFrom,
+            LocalDate dateTo,
+            LocalDate returnDateFrom,
+            LocalDate returnDateTo,
             String airportFrom,
             String airportTo,
             Integer numberOfPeople,

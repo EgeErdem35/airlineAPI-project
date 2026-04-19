@@ -8,4 +8,7 @@ import lombok.Data;
 public class CheckInResponse {
     private String transactionStatus;
     private String seatNumber;
+    private String passengerName;
+    private String flightNumber;
+    private String date;
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -70,9 +71,10 @@ public class FlightController {
     @Operation(summary = "Query flights", description = "Queries flights by date, airports, etc.")
     @GetMapping("/query")
     public FlightQueryResultResponse queryFlights(
-            // @DateTimeFormat notasyonu 500 hatalarını çözen en kritik kısımdır.
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String dateFrom,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String dateTo,
+            @RequestParam LocalDate dateFrom,
+            @RequestParam LocalDate dateTo,
+            @RequestParam(required = false) LocalDate returnDateFrom,
+            @RequestParam(required = false) LocalDate returnDateTo,
             @RequestParam String airportFrom,
             @RequestParam String airportTo,
             @RequestParam(defaultValue = "1") Integer numberOfPeople,
@@ -82,7 +84,7 @@ public class FlightController {
             HttpServletRequest request
     ) {
         return flightService.queryFlights(
-                dateFrom, dateTo, airportFrom, airportTo,
+                dateFrom, dateTo, returnDateFrom, returnDateTo, airportFrom, airportTo,
                 numberOfPeople, tripType, page, size
         );
     }

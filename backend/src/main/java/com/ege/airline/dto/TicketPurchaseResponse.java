@@ -8,4 +8,7 @@ import lombok.Data;
 public class TicketPurchaseResponse {
     private String transactionStatus;
     private String ticketNumber;
+    private java.util.List<String> passengerNames;
+    private String flightNumber;
+    private String date;
 }

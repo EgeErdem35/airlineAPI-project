@@ -134,8 +134,10 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public FlightQueryResultResponse queryFlights(
-            String dateFrom,
-            String dateTo,
+            LocalDate dateFrom,
+            LocalDate dateTo,
+            LocalDate returnDateFrom,
+            LocalDate returnDateTo,
             String airportFrom,
             String airportTo,
             Integer numberOfPeople,
@@ -143,11 +145,8 @@ public class FlightServiceImpl implements FlightService {
             int page,
             int size
     ) {
-        LocalDate parsedDateFrom = LocalDate.parse(dateFrom.trim());
-        LocalDate parsedDateTo = LocalDate.parse(dateTo.trim());
-
-        LocalDateTime fromDateTime = parsedDateFrom.atStartOfDay();
-        LocalDateTime toDateTime = parsedDateTo.atTime(LocalTime.MAX);
+        LocalDateTime fromDateTime = dateFrom.atStartOfDay();
+        LocalDateTime toDateTime = dateTo.atTime(LocalTime.MAX);
 
         validateDateRange(fromDateTime, toDateTime);
 
@@ -172,10 +171,19 @@ public class FlightServiceImpl implements FlightService {
         PagedResponse<FlightQueryItemResponse> outboundFlights = buildFlightQueryPage(outboundPage);
 
         if (TripType.ROUND_TRIP.name().equals(normalizedTripType)) {
+            if (returnDateFrom == null || returnDateTo == null) {
+                throw new IllegalArgumentException("returnDateFrom and returnDateTo must be provided for ROUND_TRIP flights.");
+            }
+
+            LocalDateTime returnFromDateTime = returnDateFrom.atStartOfDay();
+            LocalDateTime returnToDateTime = returnDateTo.atTime(LocalTime.MAX);
+
+            validateDateRange(returnFromDateTime, returnToDateTime);
+
             Page<Flight> returnPage =
                     flightRepository.findByDepartureDateTimeBetweenAndAirportFromIgnoreCaseAndAirportToIgnoreCaseAndAvailableSeatsGreaterThanEqual(
-                            fromDateTime,
-                            toDateTime,
+                            returnFromDateTime,
+                            returnToDateTime,
                             normalizedAirportTo,
                             normalizedAirportFrom,
                             numberOfPeople,
@@ -265,6 +273,9 @@ public class FlightServiceImpl implements FlightService {
         return TicketPurchaseResponse.builder()
                 .transactionStatus("SUCCESS")
                 .ticketNumber(generatedTicketNumber)
+                .passengerNames(request.getPassengerNames())
+                .flightNumber(request.getFlightNumber())
+                .date(request.getDate().toString())
                 .build();
     }
 
@@ -322,6 +333,9 @@ public class FlightServiceImpl implements FlightService {
         return CheckInResponse.builder()
                 .transactionStatus("SUCCESS")
                 .seatNumber(generatedSeatNumber)
+                .passengerName(request.getPassengerName())
+                .flightNumber(request.getFlightNumber())
+                .date(request.getDate().toString())
                 .build();
     }
 
@@ -471,6 +485,10 @@ public class FlightServiceImpl implements FlightService {
                                         .flightNumber(flight.getFlightNumber())
                                         .duration(flight.getDuration())
                                         .availableSeats(flight.getAvailableSeats())
+                                        .airportFrom(flight.getAirportFrom())
+                                        .airportTo(flight.getAirportTo())
+                                        .departureDateTime(flight.getDepartureDateTime())
+                                        .arrivalDateTime(flight.getArrivalDateTime())
                                         .build())
                                 .toList()
                 )
